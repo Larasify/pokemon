@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { procedure, router } from '../trpc';
 import { PokemonClient } from 'pokenode-ts';
+import { TRPCError } from '@trpc/server';
 
 export const appRouter = router({
   hello: procedure
@@ -18,6 +19,7 @@ export const appRouter = router({
     getpokemonbyid: procedure.input(z.object({id: z.number()})).query(async ({input}) => {
       const api = new PokemonClient();
       const pokemonid = input.id;
+      if (pokemonid < 1 || pokemonid > 898) return null;
       const pokemon =  await api.getPokemonById(pokemonid);
       return {name: pokemon.name, sprite: pokemon.sprites.front_default};
     }),
