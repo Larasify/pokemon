@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getOptionsForVote } from "../utils/getRandomPokemonHelper";
 import { trpc } from "../utils/trpc";
+import Image from "next/image";
 
 const btn =
   "inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm font-medium rounded-full text-gray-700 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500";
@@ -14,15 +15,13 @@ export default function Home() {
   }, []);
 
   const voteMutation = trpc.castvote.useMutation();
-  
 
   const voteForRoundest = (selected: number) => {
     //trpc.voteForRoundestPokemon.mutation({ id: selected });
-    if (selected === first){
-      voteMutation.mutate({votedFor: first, votedAgainst: second})
-    }
-    else{
-      voteMutation.mutate({votedFor: second, votedAgainst: first})
+    if (selected === first) {
+      voteMutation.mutate({ votedFor: first, votedAgainst: second });
+    } else {
+      voteMutation.mutate({ votedFor: second, votedAgainst: first });
     }
     //console.log(selected);
     const [firstId, seconId] = getOptionsForVote();
@@ -76,7 +75,7 @@ const PokemonListing: React.FC<{ pokemon: Pokemon; vote: () => void }> = (
 ) => {
   return (
     <div className="flex flex-col items-center">
-      <img src={props.pokemon.sprite!} className="w-64 h-64" alt="" />
+      <Image src={props.pokemon.sprite!} alt="" width={256} height={256} />
       <div className="text-center p-2 text-xl capitalize mt-[-2rem]">
         {props.pokemon.name}
       </div>
