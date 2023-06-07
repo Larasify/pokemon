@@ -29,38 +29,51 @@ export default function Home() {
     { staleTime: Infinity }
   );
 
-  if (FirstPokemon.isLoading || SecondPokemon.isLoading) {
-    return <div>Loading...</div>;
-  }
-  if (!FirstPokemon.data || !SecondPokemon.data) {
-    return <div>Something went wrong</div>;
-  }
   return (
     //center the div
     <div className="h-screen w-screen flex flex-col justify-center items-center">
-      <div className="text-2xl text-center">Which pokemon is rounder?</div>
+      <div className="text-2xl text-center">Which pokemon is cuter?</div>
       <div className="p-2"></div>
-      <div className="border rounded p-12 flex justify-between items-center max-w-2xl">
-        <div className="w-64 h-64 flex flex-col items-center">
-          <img src={FirstPokemon.data.sprite!} className="w-full" alt="" />
-          <div className="text-center text-xl capitalize mt-[-2rem]">
-            {FirstPokemon.data.name}
-          </div>
-          <button className={btn} onClick={() => voteForRoundest(first)}>
-            Rounder
-          </button>
-        </div>
-        <div className="p-8">Vs</div>
-        <div className="w-64 h-64 flex flex-col items-center">
-          <img src={SecondPokemon.data.sprite!} className="w-full" alt="" />
-          <div className="text-center text-xl capitalize mt-[-2rem]">
-            {SecondPokemon.data.name}
-          </div>
-          <button className={btn} onClick={() => voteForRoundest(second)}>
-            Rounder
-          </button>
-        </div>
+      <div className="border rounded p-8 flex justify-between items-center max-w-2xl">
+        {!FirstPokemon.isLoading &&
+          !SecondPokemon.isLoading &&
+          FirstPokemon.data &&
+          SecondPokemon.data && (
+            <>
+              <PokemonListing
+                pokemon={FirstPokemon.data}
+                vote={() => voteForRoundest(first)}
+              />
+              <div className="p-8">Vs</div>
+              <PokemonListing
+                pokemon={SecondPokemon.data}
+                vote={() => voteForRoundest(second)}
+              />
+            </>
+          )}
       </div>
     </div>
   );
 }
+
+interface Pokemon {
+  name: string;
+  sprite: string | null;
+  // Add other properties as needed
+}
+
+const PokemonListing: React.FC<{ pokemon: Pokemon; vote: () => void }> = (
+  props
+) => {
+  return (
+    <div className="flex flex-col items-center">
+      <img src={props.pokemon.sprite!} className="w-64 h-64" alt="" />
+      <div className="text-center p-2 text-xl capitalize mt-[-2rem]">
+        {props.pokemon.name}
+      </div>
+      <button className={btn} onClick={() => props.vote()}>
+        Cuter
+      </button>
+    </div>
+  );
+};
