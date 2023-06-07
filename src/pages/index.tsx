@@ -39,7 +39,7 @@ export default function Home() {
 
   return (
     //center the div
-    <div className="h-screen w-screen flex flex-col justify-center items-center">
+    <div className="h-screen w-screen flex flex-col justify-center items-center relative">
       <div className="text-2xl text-center">Which pokemon is cuter?</div>
       <div className="p-2"></div>
       <div className="border rounded p-8 flex justify-between items-center max-w-2xl">
@@ -60,6 +60,7 @@ export default function Home() {
             </>
           )}
       </div>
+      <div className="absolute bottom-0 w-full text-center text-xl pb-2"><a href="https://github.com/Larasify/pokemon">Github</a></div>  
     </div>
   );
 }
