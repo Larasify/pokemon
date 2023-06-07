@@ -66,8 +66,9 @@ export default function Home() {
 }
 
 interface Pokemon {
+  id: number;
   name: string;
-  sprite: string | null;
+  spriteUrl: string;
   // Add other properties as needed
 }
 
@@ -76,7 +77,7 @@ const PokemonListing: React.FC<{ pokemon: Pokemon; vote: () => void }> = (
 ) => {
   return (
     <div className="flex flex-col items-center">
-      <Image src={props.pokemon.sprite!} alt="" width={256} height={256} />
+      <Image src={props.pokemon.spriteUrl!} alt="" width={256} height={256} />
       <div className="text-center p-2 text-xl capitalize mt-[-2rem]">
         {props.pokemon.name}
       </div>
