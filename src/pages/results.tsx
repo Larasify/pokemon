@@ -1,0 +1,54 @@
+import type { GetServerSideProps } from "next";
+import { prisma } from "../server/utils/prisma";
+import { AsyncReturnType } from "../utils/ts-bs";
+import Image from "next/image";
+
+const getPokemonInOrder = async () => {
+  return await prisma.pokemon.findMany({
+    orderBy: {
+      VoteFor: { _count: "desc" },
+    },
+    select: {
+      id: true,
+      name: true,
+      spriteUrl: true,
+      _count: {
+        select: { VoteFor: true, VoteAgainst: true },
+      },
+    },
+  });
+};
+
+type PokemonQueryResult = AsyncReturnType<typeof getPokemonInOrder>;
+
+const PokemonListing: React.FC<{ pokemon: PokemonQueryResult[number] }> = (
+  {pokemon}
+) => {
+  return (
+    <div className="flex border-b p-2 items-center">
+      <Image src={pokemon.spriteUrl} width={64} height={64} alt="" />
+      <div className="capitilize">{pokemon.name}</div>
+    </div>
+  );
+};
+
+const ResultsPage: React.FC<{ pokemon: PokemonQueryResult }> = (props) => {
+  return (
+    <div className="flex flex-col items-center">
+      <h2 className="text-2xl p-4">Results</h2>
+      <div className="flex flex-col w-full max-w-2xl border">
+      {props.pokemon.map((currentPokemon, index) => {
+        return <PokemonListing pokemon={currentPokemon} key={index} />;
+      })}
+      </div>
+    </div>
+  );
+};
+
+export default ResultsPage;
+
+export const getStaticProps: GetServerSideProps = async () => {
+  const pokemonOrdered = await getPokemonInOrder();
+  const DAY_IN_SECONDS = 60 * 60 * 24;
+  return { props: { pokemon:pokemonOrdered }, revalidate: DAY_IN_SECONDS };
+};
