@@ -13,9 +13,18 @@ export default function Home() {
     setOptions([firstId, seconId]);
   }, []);
 
+  const voteMutation = trpc.castvote.useMutation();
+  
+
   const voteForRoundest = (selected: number) => {
     //trpc.voteForRoundestPokemon.mutation({ id: selected });
-    console.log(selected);
+    if (selected === first){
+      voteMutation.mutate({votedFor: first, votedAgainst: second})
+    }
+    else{
+      voteMutation.mutate({votedFor: second, votedAgainst: first})
+    }
+    //console.log(selected);
     const [firstId, seconId] = getOptionsForVote();
     setOptions([firstId, seconId]);
   };
