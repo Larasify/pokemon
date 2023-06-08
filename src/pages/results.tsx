@@ -21,13 +21,23 @@ const getPokemonInOrder = async () => {
 
 type PokemonQueryResult = AsyncReturnType<typeof getPokemonInOrder>;
 
-const PokemonListing: React.FC<{ pokemon: PokemonQueryResult[number] }> = (
-  {pokemon}
-) => {
+const generateCountPercent = (pokemon: PokemonQueryResult[number]) => {
+  const totalVotes = pokemon._count.VoteFor + pokemon._count.VoteAgainst;
+  if (totalVotes === 0) return 0;
+  const percent = pokemon._count.VoteFor / totalVotes;
+  return percent * 100;
+};
+
+const PokemonListing: React.FC<{ pokemon: PokemonQueryResult[number] }> = ({
+  pokemon,
+}) => {
   return (
-    <div className="flex border-b p-2 items-center">
-      <Image src={pokemon.spriteUrl} width={64} height={64} alt="" />
-      <div className="capitilize">{pokemon.name}</div>
+    <div className="flex border-b p-2 items-center justify-between">
+      <div className="flex items-center">
+        <Image src={pokemon.spriteUrl} width={64} height={64} alt="" />
+        <div className="capitalize">{pokemon.name}</div>
+      </div>
+      <div className="pr-3">{`${generateCountPercent(pokemon)}%`}</div>
     </div>
   );
 };
@@ -37,9 +47,9 @@ const ResultsPage: React.FC<{ pokemon: PokemonQueryResult }> = (props) => {
     <div className="flex flex-col items-center">
       <h2 className="text-2xl p-4">Results</h2>
       <div className="flex flex-col w-full max-w-2xl border">
-      {props.pokemon.map((currentPokemon, index) => {
-        return <PokemonListing pokemon={currentPokemon} key={index} />;
-      })}
+        {props.pokemon.map((currentPokemon, index) => {
+          return <PokemonListing pokemon={currentPokemon} key={index} />;
+        })}
       </div>
     </div>
   );
@@ -50,5 +60,5 @@ export default ResultsPage;
 export const getStaticProps: GetServerSideProps = async () => {
   const pokemonOrdered = await getPokemonInOrder();
   const DAY_IN_SECONDS = 60 * 60 * 24;
-  return { props: { pokemon:pokemonOrdered }, revalidate: DAY_IN_SECONDS };
+  return { props: { pokemon: pokemonOrdered }, revalidate: DAY_IN_SECONDS };
 };

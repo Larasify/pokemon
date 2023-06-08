@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getOptionsForVote } from "../utils/getRandomPokemonHelper";
 import { trpc } from "../utils/trpc";
 import Image from "next/image";
+import Link from "next/link";
 
 const btn =
   "inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm font-medium rounded-full text-gray-700 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500";
@@ -36,31 +37,36 @@ export default function Home() {
     { id: second },
     { staleTime: Infinity }
   );
+  const isLoading = !FirstPokemon.isLoading && !SecondPokemon.isLoading;
 
   return (
     //center the div
-    <div className="h-screen w-screen flex flex-col justify-center items-center relative">
-      <div className="text-2xl text-center">Which pokemon is cuter?</div>
-      <div className="p-2"></div>
-      <div className="border rounded p-8 flex justify-between items-center max-w-2xl">
-        {!FirstPokemon.isLoading &&
-          !SecondPokemon.isLoading &&
-          FirstPokemon.data &&
-          SecondPokemon.data && (
-            <>
-              <PokemonListing
-                pokemon={FirstPokemon.data}
-                vote={() => voteForRoundest(first)}
-              />
-              <div className="p-8">Vs</div>
-              <PokemonListing
-                pokemon={SecondPokemon.data}
-                vote={() => voteForRoundest(second)}
-              />
-            </>
-          )}
+    <div className="h-screen w-screen flex flex-col justify-between items-center relative">
+      <div className="text-2xl pt-8 text-center">Which pokemon is cuter?</div>
+      {isLoading && FirstPokemon.data && SecondPokemon.data && (
+        <>
+          <div className="rounded p-8 flex justify-between items-center max-w-2xl">
+            <PokemonListing
+              pokemon={FirstPokemon.data}
+              vote={() => voteForRoundest(first)}
+            />
+            <div className="p-8">Vs</div>
+            <PokemonListing
+              pokemon={SecondPokemon.data}
+              vote={() => voteForRoundest(second)}
+            />
+            <div className="p-2"></div>
+          </div>
+        </>
+      )}
+      {!FirstPokemon.data && !SecondPokemon.data && (
+        <img src="/rings.svg" className="w-48" />
+      )}
+      <div className="w-full text-center text-xl pb-2">
+        <a href="https://github.com/Larasify/pokemon">Github</a>
+        {" | "}
+        <Link href="/results">Results</Link>
       </div>
-      <div className="absolute bottom-0 w-full text-center text-xl pb-2"><a href="https://github.com/Larasify/pokemon">Github</a></div>  
     </div>
   );
 }
