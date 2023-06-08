@@ -85,6 +85,8 @@ export default function Home() {
         <a href="https://github.com/Larasify/pokemon">Github</a>
         <span className="p-4">{"-"}</span>
         <Link href="/results">Results</Link>
+        <span className="p-4">{"-"}</span>
+        <Link href="/about">About</Link>
       </div>
     </div>
   );
