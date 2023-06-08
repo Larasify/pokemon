@@ -35,6 +35,8 @@ export default function Home() {
   };
 
   const dataLoaded = !!pokemonPair;
+  const fetchingNext = voteMutation.isLoading || isLoading;
+
   //if(!dataLoaded)  return <div>a</div>
   //const [FirstPokemon, SecondPokemon] = data;
   //const [first, second] = [FirstPokemon.id, SecondPokemon.id];
@@ -60,17 +62,17 @@ export default function Home() {
       <div className="text-2xl pt-8 text-center">Which pokemon is cuter?</div>
       {dataLoaded && (
         <>
-          <div className="p-8 flex justify-between items-center max-w-2xl flex-col md:flex-row">
+          <div className="p-8 flex justify-between items-center max-w-2xl flex-col md:flex-row animate-fade-in">
             <PokemonListing
               pokemon={pokemonPair.firstPokemon}
               vote={() => voteForRoundest(pokemonPair.firstPokemon.id)}
-              disabled={isLoading}
+              disabled={fetchingNext}
             />
             <div className="p-8">or</div>
             <PokemonListing
               pokemon={pokemonPair.secondPokemon}
               vote={() => voteForRoundest(pokemonPair.secondPokemon.id)}
-              disabled={isLoading}
+              disabled={fetchingNext}
             />
             <div className="p-2"></div>
           </div>
@@ -99,11 +101,11 @@ const PokemonListing: React.FC<{ pokemon: Pokemon; vote: () => void ; disabled:b
   props
 ) => {
   return (
-    <div className="flex flex-col items-center">
+    <div className={`flex flex-col items-center transition-opacity ${props.disabled && "opacity-0"}`} key={props.pokemon.id}>
       <div className="text-center p-2 text-xl capitalize mt-[-2rem]">
         {props.pokemon.name}
       </div>
-      <Image src={props.pokemon.spriteUrl!} alt="" width={256} height={256} />
+      <Image src={props.pokemon.spriteUrl!} alt="" width={256} height={256} className="animate-fade-in" />
       <button className={btn} onClick={() => props.vote()} disabled={props.disabled}>
         Cuter
       </button>
