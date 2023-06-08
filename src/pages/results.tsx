@@ -2,6 +2,7 @@ import type { GetServerSideProps } from "next";
 import { prisma } from "../server/utils/prisma";
 import { AsyncReturnType } from "../utils/ts-bs";
 import Image from "next/image";
+import { get } from "http";
 
 const getPokemonInOrder = async () => {
   return await prisma.pokemon.findMany({
@@ -37,7 +38,7 @@ const PokemonListing: React.FC<{ pokemon: PokemonQueryResult[number] }> = ({
         <Image src={pokemon.spriteUrl} width={64} height={64} alt="" />
         <div className="capitalize">{pokemon.name}</div>
       </div>
-      <div className="pr-3">{`${generateCountPercent(pokemon)}%`}</div>
+      <div className="pr-3">{`${generateCountPercent(pokemon).toFixed(2)}%`}</div>
     </div>
   );
 };
@@ -47,7 +48,7 @@ const ResultsPage: React.FC<{ pokemon: PokemonQueryResult }> = (props) => {
     <div className="flex flex-col items-center">
       <h2 className="text-2xl p-4">Results</h2>
       <div className="flex flex-col w-full max-w-2xl border">
-        {props.pokemon.map((currentPokemon, index) => {
+        {props.pokemon.sort((a,b) => generateCountPercent(b) - generateCountPercent(a)).map((currentPokemon, index) => {
           return <PokemonListing pokemon={currentPokemon} key={index} />;
         })}
       </div>
@@ -60,5 +61,5 @@ export default ResultsPage;
 export const getStaticProps: GetServerSideProps = async () => {
   const pokemonOrdered = await getPokemonInOrder();
   const DAY_IN_SECONDS = 60 * 60 * 24;
-  return { props: { pokemon: pokemonOrdered }, revalidate: DAY_IN_SECONDS };
+  return { props: { pokemon: pokemonOrdered }, revalidate: 60 };
 };
