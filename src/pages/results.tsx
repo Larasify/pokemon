@@ -3,6 +3,7 @@ import { prisma } from "../server/utils/prisma";
 import { AsyncReturnType } from "../utils/ts-bs";
 import Image from "next/image";
 import { get } from "http";
+import Head from "next/head";
 
 const getPokemonInOrder = async () => {
   return await prisma.pokemon.findMany({
@@ -38,7 +39,9 @@ const PokemonListing: React.FC<{ pokemon: PokemonQueryResult[number] }> = ({
         <Image src={pokemon.spriteUrl} width={64} height={64} alt="" />
         <div className="capitalize">{pokemon.name}</div>
       </div>
-      <div className="pr-3">{`${generateCountPercent(pokemon).toFixed(2)}%`}</div>
+      <div className="pr-3">{`${generateCountPercent(pokemon).toFixed(
+        2
+      )}%`}</div>
     </div>
   );
 };
@@ -46,11 +49,16 @@ const PokemonListing: React.FC<{ pokemon: PokemonQueryResult[number] }> = ({
 const ResultsPage: React.FC<{ pokemon: PokemonQueryResult }> = (props) => {
   return (
     <div className="flex flex-col items-center">
+      <Head>
+        <title>Cutest Pokemon Results</title>
+      </Head>
       <h2 className="text-2xl p-4">Results</h2>
       <div className="flex flex-col w-full max-w-2xl border">
-        {props.pokemon.sort((a,b) => generateCountPercent(b) - generateCountPercent(a)).map((currentPokemon, index) => {
-          return <PokemonListing pokemon={currentPokemon} key={index} />;
-        })}
+        {props.pokemon
+          .sort((a, b) => generateCountPercent(b) - generateCountPercent(a))
+          .map((currentPokemon, index) => {
+            return <PokemonListing pokemon={currentPokemon} key={index} />;
+          })}
       </div>
     </div>
   );

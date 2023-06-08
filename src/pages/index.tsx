@@ -3,6 +3,7 @@ import { getOptionsForVote } from "../utils/getRandomPokemonHelper";
 import { trpc } from "../utils/trpc";
 import Image from "next/image";
 import Link from "next/link";
+import Head from "next/head";
 
 const btn =
   "inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm font-medium rounded-full text-gray-700 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500";
@@ -42,6 +43,9 @@ export default function Home() {
   return (
     //center the div
     <div className="h-screen w-screen flex flex-col justify-between items-center relative">
+      <Head>
+        <title>Cutest Pokemon</title>
+      </Head>
       <div className="text-2xl pt-8 text-center">Which pokemon is cuter?</div>
       {isLoading && FirstPokemon.data && SecondPokemon.data && (
         <>
