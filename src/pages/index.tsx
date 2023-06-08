@@ -49,12 +49,12 @@ export default function Home() {
       <div className="text-2xl pt-8 text-center">Which pokemon is cuter?</div>
       {isLoading && FirstPokemon.data && SecondPokemon.data && (
         <>
-          <div className="rounded p-8 flex justify-between items-center max-w-2xl">
+          <div className="rounded p-8 flex justify-between items-center max-w-2xl flex-col md:flex-row">
             <PokemonListing
               pokemon={FirstPokemon.data}
               vote={() => voteForRoundest(first)}
             />
-            <div className="p-8">Vs</div>
+            <div className="p-8">or</div>
             <PokemonListing
               pokemon={SecondPokemon.data}
               vote={() => voteForRoundest(second)}
@@ -68,7 +68,7 @@ export default function Home() {
       )}
       <div className="w-full text-center text-xl pb-2">
         <a href="https://github.com/Larasify/pokemon">Github</a>
-        {" | "}
+        <span className="p-4">{"-"}</span>
         <Link href="/results">Results</Link>
       </div>
     </div>
@@ -87,10 +87,10 @@ const PokemonListing: React.FC<{ pokemon: Pokemon; vote: () => void }> = (
 ) => {
   return (
     <div className="flex flex-col items-center">
-      <Image src={props.pokemon.spriteUrl!} alt="" width={256} height={256} />
       <div className="text-center p-2 text-xl capitalize mt-[-2rem]">
         {props.pokemon.name}
       </div>
+      <Image src={props.pokemon.spriteUrl!} alt="" width={256} height={256} />
       <button className={btn} onClick={() => props.vote()}>
         Cuter
       </button>
