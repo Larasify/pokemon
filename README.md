@@ -6,7 +6,10 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-npm run ts-no ./scripts/fill-db.ts to fill the database with pokemon data
+to fill the database with pokemon data
+```
+npm run ts-no ./scripts/fill-db.ts 
+```
 
 First, run the development server:
 
