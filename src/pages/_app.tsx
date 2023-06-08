@@ -5,7 +5,7 @@ import Head from "next/head";
 const MyApp: AppType = ({ Component, pageProps }) => {
   const description = "Lets find the cutest pokemon";
   const title = "Cutest Pokemon";
-  const imageMetaURL = "https://pokemon-larasify.vercel.app/favicon.svg";
+  const imageMetaURL = "https://pokemon-larasify.vercel.app/pokeball.png";
 
 
   return (
@@ -27,19 +27,19 @@ const MyApp: AppType = ({ Component, pageProps }) => {
         <link
           rel="apple-touch-icon"
           sizes="180x180"
-          href="/favicon.svg"
+          href="/pokeball.png"
         />
         <link
           rel="icon"
           type="image/png"
           sizes="32x32"
-          href="/favicon.svg"
+          href="/pokeball.png"
         />
         <link
           rel="icon"
           type="image/png"
           sizes="16x16"
-          href="/favicon.svg"
+          href="/pokeball.png"
         />
         <link rel="manifest" href="/site.webmanifest?v=2" />
         <link rel="shortcut icon" href="/favicon.svg" />
