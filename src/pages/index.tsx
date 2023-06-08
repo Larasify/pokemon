@@ -81,7 +81,7 @@ export default function Home() {
       {!dataLoaded && (
         <img src="/rings.svg" className="w-48" />
       )}
-      <div className="w-full text-center text-xl pb-2">
+      <div className="w-full text-center text-xl pb-4">
         <a href="https://github.com/Larasify/pokemon">Github</a>
         <span className="p-4">{"-"}</span>
         <Link href="/results">Results</Link>
