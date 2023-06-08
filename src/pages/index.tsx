@@ -9,27 +9,38 @@ const btn =
   "inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm font-medium rounded-full text-gray-700 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500";
 
 export default function Home() {
-  const [[first, second], setOptions] = useState([0, 0]);
+  /*const [[first, second], setOptions] = useState([0, 0]);
 
   useEffect(() => {
     const [firstId, seconId] = getOptionsForVote();
     setOptions([firstId, seconId]);
-  }, []);
+  }, []);*/
+  const {data: pokemonPair, isLoading, refetch} =trpc.getpokemonpair.useQuery(undefined, {refetchInterval: 0, refetchOnReconnect: false, refetchOnMount: false, refetchOnWindowFocus: false});
+  //refetch();
 
   const voteMutation = trpc.castvote.useMutation();
 
   const voteForRoundest = (selected: number) => {
     //trpc.voteForRoundestPokemon.mutation({ id: selected });
-    if (selected === first) {
-      voteMutation.mutate({ votedFor: first, votedAgainst: second });
+    if (!pokemonPair) return;
+    if (selected === pokemonPair.firstPokemon.id) {
+      voteMutation.mutate({ votedFor: pokemonPair?.firstPokemon.id, votedAgainst: pokemonPair?.secondPokemon.id });
     } else {
-      voteMutation.mutate({ votedFor: second, votedAgainst: first });
+      voteMutation.mutate({ votedFor: pokemonPair.secondPokemon.id, votedAgainst: pokemonPair.firstPokemon.id });
     }
     //console.log(selected);
     const [firstId, seconId] = getOptionsForVote();
-    setOptions([firstId, seconId]);
+    //setOptions([firstId, seconId]);
+    refetch();
   };
 
+  const dataLoaded = !!pokemonPair;
+  //if(!dataLoaded)  return <div>a</div>
+  //const [FirstPokemon, SecondPokemon] = data;
+  //const [first, second] = [FirstPokemon.id, SecondPokemon.id];
+
+
+  /*
   const FirstPokemon = trpc.getpokemonbyid.useQuery(
     { id: first },
     { staleTime: Infinity }
@@ -37,8 +48,8 @@ export default function Home() {
   const SecondPokemon = trpc.getpokemonbyid.useQuery(
     { id: second },
     { staleTime: Infinity }
-  );
-  const isLoading = !FirstPokemon.isLoading && !SecondPokemon.isLoading;
+  );*/
+  //const isLoading = !FirstPokemon.isLoading && !SecondPokemon.isLoading;
 
   return (
     //center the div
@@ -47,23 +58,25 @@ export default function Home() {
         <title>Cutest Pokemon</title>
       </Head>
       <div className="text-2xl pt-8 text-center">Which pokemon is cuter?</div>
-      {isLoading && FirstPokemon.data && SecondPokemon.data && (
+      {dataLoaded && (
         <>
-          <div className="rounded p-8 flex justify-between items-center max-w-2xl flex-col md:flex-row">
+          <div className="p-8 flex justify-between items-center max-w-2xl flex-col md:flex-row">
             <PokemonListing
-              pokemon={FirstPokemon.data}
-              vote={() => voteForRoundest(first)}
+              pokemon={pokemonPair.firstPokemon}
+              vote={() => voteForRoundest(pokemonPair.firstPokemon.id)}
+              disabled={isLoading}
             />
             <div className="p-8">or</div>
             <PokemonListing
-              pokemon={SecondPokemon.data}
-              vote={() => voteForRoundest(second)}
+              pokemon={pokemonPair.secondPokemon}
+              vote={() => voteForRoundest(pokemonPair.secondPokemon.id)}
+              disabled={isLoading}
             />
             <div className="p-2"></div>
           </div>
         </>
       )}
-      {!FirstPokemon.data && !SecondPokemon.data && (
+      {!dataLoaded && (
         <img src="/rings.svg" className="w-48" />
       )}
       <div className="w-full text-center text-xl pb-2">
@@ -82,7 +95,7 @@ interface Pokemon {
   // Add other properties as needed
 }
 
-const PokemonListing: React.FC<{ pokemon: Pokemon; vote: () => void }> = (
+const PokemonListing: React.FC<{ pokemon: Pokemon; vote: () => void ; disabled:boolean}> = (
   props
 ) => {
   return (
@@ -91,7 +104,7 @@ const PokemonListing: React.FC<{ pokemon: Pokemon; vote: () => void }> = (
         {props.pokemon.name}
       </div>
       <Image src={props.pokemon.spriteUrl!} alt="" width={256} height={256} />
-      <button className={btn} onClick={() => props.vote()}>
+      <button className={btn} onClick={() => props.vote()} disabled={props.disabled}>
         Cuter
       </button>
     </div>
