@@ -11,8 +11,7 @@ export default function AboutPage() {
         <div className="text-2xl pt-4 text-center">About</div>
         <div className="flex justify-between items-center max-w-2xl flex-col md:flex-row animate-fade-in">
           <div className="p-8">
-            This website was created by following Theo's tutorial to learn more
-            about React/Next/Tailwind. Go check him out at{" "}
+            {`This website was created by following Theo's tutorial to learn more about React/Next/Tailwind. Go check him out at `}
             <a href="https://t3.gg/" className="text-blue-200 underline">
               t3.gg
             </a>
