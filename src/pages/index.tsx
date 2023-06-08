@@ -29,7 +29,7 @@ export default function Home() {
       voteMutation.mutate({ votedFor: pokemonPair.secondPokemon.id, votedAgainst: pokemonPair.firstPokemon.id });
     }
     //console.log(selected);
-    const [firstId, seconId] = getOptionsForVote();
+    //const [firstId, seconId] = getOptionsForVote();
     //setOptions([firstId, seconId]);
     refetch();
   };

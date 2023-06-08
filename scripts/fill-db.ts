@@ -3,7 +3,7 @@ import { PokemonClient } from "pokenode-ts";
 
 const doBackFill = async () => {
   const pokeApi = new PokemonClient();
-  const allPokemon = await pokeApi.listPokemons(0, 493);
+  const allPokemon = await pokeApi.listPokemons(0, 151);
   const formattedPokemon = allPokemon.results.map((p, index) => ({
     id: index + 1,
     name: (p as { name: string }).name,
