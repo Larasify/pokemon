@@ -87,6 +87,7 @@ export default function Home() {
         <Link href="/results">Results</Link>
         <span className="p-4">{"-"}</span>
         <Link href="/about">About</Link>
+        <Link href="/smash">.</Link>
       </div>
     </div>
   );

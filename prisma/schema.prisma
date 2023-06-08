@@ -40,4 +40,7 @@ model Pokemon {
   VoteFor Vote[] @relation(name:"votesFor")
   VoteAgainst Vote[] @relation(name:"votesAgainst")
 
+  smashCount Int @default(0)
+  passCount Int @default(0)
+
 }
