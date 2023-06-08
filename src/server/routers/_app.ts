@@ -30,8 +30,11 @@ export const appRouter = router({
 
     getpokemonpair: procedure.query(async () => {
       const [first, second] = getOptionsForVote();
-      const firstPokemon = await prisma.pokemon.findUnique({where:{id: first}});
-      const secondPokemon = await prisma.pokemon.findUnique({where:{id: second}});
+      //const firstPokemon = await prisma.pokemon.findUnique({where:{id: first}});
+      //const secondPokemon = await prisma.pokemon.findUnique({where:{id: second}});
+      const BothPokemon = await prisma.pokemon.findMany({where:{id: {in: [first, second]}}});
+      const firstPokemon = BothPokemon.find(pokemon => pokemon.id === first);
+      const secondPokemon = BothPokemon.find(pokemon => pokemon.id === second);
       if (!firstPokemon || !secondPokemon) throw new TRPCError({ code: "NOT_FOUND", message: "Pokemon not found" });
       return {firstPokemon, secondPokemon};
     }),
